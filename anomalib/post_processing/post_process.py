@@ -150,7 +150,7 @@ def compute_mask(anomaly_map: np.ndarray, threshold: float, kernel_size: int = 4
     anomaly_map = anomaly_map.squeeze()
     mask: np.ndarray = np.zeros_like(anomaly_map).astype(np.uint8)
     #mask[anomaly_map > threshold] = 1
-    mask[anomaly_map > 0.5] = 1
+    mask[anomaly_map > 0.1] = 1
 
     kernel = morphology.disk(kernel_size)
     mask = morphology.opening(mask, kernel)
