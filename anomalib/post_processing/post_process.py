@@ -96,9 +96,9 @@ def anomaly_map_to_color_map(anomaly_map: np.ndarray, normalize: bool = True) ->
         np.ndarray: [description]
     """
     if normalize:
-        #anomaly_map = (anomaly_map - anomaly_map.min()) / np.ptp(anomaly_map)
-        anomaly_map = anomaly_map
-    anomaly_map = anomaly_map * 255
+        anomaly_map = (anomaly_map - anomaly_map.min()) / np.ptp(anomaly_map)
+        #anomaly_map = anomaly_map
+    anomaly_map = anomaly_map * 0
     anomaly_map = anomaly_map.astype(np.uint8)
 
     anomaly_map = cv2.applyColorMap(anomaly_map, cv2.COLORMAP_JET)
@@ -150,7 +150,7 @@ def compute_mask(anomaly_map: np.ndarray, threshold: float, kernel_size: int = 4
     anomaly_map = anomaly_map.squeeze()
     mask: np.ndarray = np.zeros_like(anomaly_map).astype(np.uint8)
     #mask[anomaly_map > threshold] = 1
-    mask[anomaly_map > 0.8] = 1
+    mask[anomaly_map > 0.1] = 1
 
     kernel = morphology.disk(kernel_size)
     mask = morphology.opening(mask, kernel)
