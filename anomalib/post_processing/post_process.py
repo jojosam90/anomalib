@@ -96,7 +96,8 @@ def anomaly_map_to_color_map(anomaly_map: np.ndarray, normalize: bool = True) ->
         np.ndarray: [description]
     """
     if normalize:
-        anomaly_map = (anomaly_map - anomaly_map.min()) / np.ptp(anomaly_map)
+        #anomaly_map = (anomaly_map - anomaly_map.min()) / np.ptp(anomaly_map)
+        anomaly_map = anomaly_map - anomaly_map.min()
     anomaly_map = anomaly_map * 255
     anomaly_map = anomaly_map.astype(np.uint8)
 
