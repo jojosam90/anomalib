@@ -97,7 +97,7 @@ def anomaly_map_to_color_map(anomaly_map: np.ndarray, normalize: bool = True) ->
     """
     if normalize:
         #anomaly_map = (anomaly_map - anomaly_map.min()) / np.ptp(anomaly_map)
-        anomaly_map = anomaly_map.min()
+        anomaly_map = anomaly_map
     anomaly_map = anomaly_map * 255
     anomaly_map = anomaly_map.astype(np.uint8)
 
@@ -154,6 +154,8 @@ def compute_mask(anomaly_map: np.ndarray, threshold: float, kernel_size: int = 4
 
     kernel = morphology.disk(kernel_size)
     mask = morphology.opening(mask, kernel)
+    
+    mask = morphology.dilate(mask, kernel)
 
     mask *= 255
 
