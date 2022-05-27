@@ -97,7 +97,7 @@ def anomaly_map_to_color_map(anomaly_map: np.ndarray, normalize: bool = True) ->
     """
     if normalize:
         #anomaly_map = (anomaly_map - anomaly_map.min()) / np.ptp(anomaly_map)
-        anomaly_map = anomaly_map - anomaly_map.min()
+        anomaly_map = anomaly_map - anomaly_map.max()
     anomaly_map = anomaly_map * 255
     anomaly_map = anomaly_map.astype(np.uint8)
 
@@ -108,7 +108,7 @@ def anomaly_map_to_color_map(anomaly_map: np.ndarray, normalize: bool = True) ->
 
 def superimpose_anomaly_map(
     #anomaly_map: np.ndarray, image: np.ndarray, alpha: float = 0.4, gamma: int = 0, normalize: bool = False
-    anomaly_map: np.ndarray, image: np.ndarray, alpha: float = 0.4, gamma: int = 0, normalize: bool = True
+    anomaly_map: np.ndarray, image: np.ndarray, alpha: float = 0.8, gamma: int = 0, normalize: bool = True
 ) -> np.ndarray:
     """Superimpose anomaly map on top of in the input image.
 
@@ -131,6 +131,7 @@ def superimpose_anomaly_map(
 
     anomaly_map = anomaly_map_to_color_map(anomaly_map.squeeze(), normalize=normalize)
     superimposed_map = cv2.addWeighted(anomaly_map, alpha, image, (1 - alpha), gamma)
+    
     return superimposed_map
 
 
@@ -149,7 +150,7 @@ def compute_mask(anomaly_map: np.ndarray, threshold: float, kernel_size: int = 4
     anomaly_map = anomaly_map.squeeze()
     mask: np.ndarray = np.zeros_like(anomaly_map).astype(np.uint8)
     #mask[anomaly_map > threshold] = 1
-    mask[anomaly_map < 0.1] = 1
+    mask[anomaly_map > 0.8] = 1
 
     kernel = morphology.disk(kernel_size)
     mask = morphology.opening(mask, kernel)
